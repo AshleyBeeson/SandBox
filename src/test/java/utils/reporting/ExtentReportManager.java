@@ -5,6 +5,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import lombok.Getter;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,11 @@ public class ExtentReportManager {
             case HTML:
                 report.attachReporter(getHtmlReporter(reportDetails));
         }
+    }
+
+    public void addScreenShot(String testName,String imageFilePath) throws IOException {
+        ExtentTest extentTest = tests.get(testName);
+        extentTest.addScreenCaptureFromPath(imageFilePath);
     }
 
     public void createTest(String testName){
