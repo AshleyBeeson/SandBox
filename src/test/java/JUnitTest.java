@@ -1,13 +1,9 @@
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.junit.*;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.PageFactory;
-import testpages.DemoSiteLoginPage;
-import utils.ScreenShot;
+import org.openqa.selenium.chrome.ChromeDriver;
 import utils.reporting.ExtentReportManager;
 import utils.reporting.ReportDetails;
 
@@ -21,13 +17,16 @@ public class JUnitTest {
 
     @BeforeClass
     public static void init(){
-        ReportDetails reportDetails = new ReportDetails("C:\\Users\\abeeson\\Desktop\\SandBox\\SandBox\\TestReport","Basic Extent Report","Basic Report");
+        String property = System.getProperty("user.dir");
+        ReportDetails reportDetails = new ReportDetails(property + "\\TestReport",
+                "Basic Extent Report","Basic Report");
+        reportDetails.setTheme(Theme.DARK);
         reportManager = new ExtentReportManager(ExtentReportManager.ReportType.HTML,reportDetails);
     }
 
     @Before
     public void setUp(){
-        webDriver = new FirefoxDriver();
+        webDriver = new ChromeDriver();
     }
 
     @After
@@ -40,68 +39,24 @@ public class JUnitTest {
         reportManager.clearTests();
     }
 
-    @Test
-    public void failingTest() throws IOException {
-        String testName = "Failing Test";
-        reportManager.createTest(testName);
-        ExtentTest test = reportManager.getTest(testName);
-        boolean pass = false;
-        webDriver.navigate().to("http://www.facebook.co.uk");
-        test.log(Status.INFO, "Info level message to show information that allows a NONE TECHNICAL person to understand what the test is doing");
-        test.log(Status.DEBUG, "Debug level message to display any information a TECHNICAL person might need to know");
-        test.log(Status.ERROR, "Error level message to display what went wrong (Can contain the stacktrace of the issue)");
 
-        if (pass){
-            test.pass("Test Passed");
-        }else{
-            test.fail("Test Failed");
-            String imagePath = ScreenShot.take(webDriver,"Failing-test-"+ random.nextInt());
-            test.addScreenCaptureFromPath(imagePath);
-        }
-        Assert.assertTrue(pass);
+    @Test
+    public void passingLogLevelTest(){
+        ExtentTest passingLogLevelTest = reportManager.setUpTest();
+        passingLogLevelTest.log(Status.INFO,"Info level message to show information that allows a NON-TECHNICAL" +
+                " person to understand what the test is doing");
+        passingLogLevelTest.log(Status.DEBUG,
+                "Debug level message to display any information a TECHNICAL person might need to know");
+        passingLogLevelTest.pass("Example passing test");
     }
 
     @Test
-    public void passingTest() throws IOException {
-        String testName = "Passing Test";
-        reportManager.createTest(testName);
-        ExtentTest test = reportManager.getTest(testName);
-        boolean pass = true;
-        test.log(Status.INFO, "Info level message to show information that allows a NONE TECHNICAL person to understand what the test is doing");
-        test.log(Status.DEBUG, "Debug level message to display any information a TECHNICAL person might need to know");
-        if (pass){
-            test.pass("Test Passed");
-        }else{
-            test.fail("Test Failed");
-            String image = ScreenShot.take(webDriver,"Passing-test-"+ random.nextInt());
-            test.error("failed: \n" +  test.addScreenCaptureFromPath(image));
-        }
-        Assert.assertTrue(pass);
+    public void failingLogLevelTest() throws IOException {
+        ExtentTest extentTest = reportManager.setUpTest();
+        extentTest.log(Status.WARNING,"Used to report an issue that may cause problems within a system");
+        extentTest.log(Status.ERROR,"Used to report an issue that will cause problems within a system");
+        extentTest.log(Status.FATAL,"Used to report an issue that will fail/break the system");
+        extentTest.fail("Example Failing test");
     }
-
-    @Test
-    public void demoTest(){
-        String testName = "Demo Test";
-        reportManager.createTest(testName);
-        ExtentTest test = reportManager.getTest(testName);
-        webDriver.navigate().to("http://thedemosite.co.uk");
-        WebElement element = webDriver.findElement(By.cssSelector("body > div > center > table > tbody > tr:nth-child(2) > td > div > center > table > tbody > tr > td:nth-child(2) > p > small > a:nth-child(7)"));
-        element.click();
-
-        DemoSiteLoginPage loginPage = PageFactory.initElements(webDriver,DemoSiteLoginPage.class);
-        loginPage.enterUsername("USERNAME");
-        loginPage.enterPassword("PASSWORD");
-        loginPage.clickLogin();
-
-        boolean login = loginPage.verifyLogin();
-
-        if (login){
-            test.pass("Successful Login");
-        }else{
-            test.fail("Failed Login");
-        }
-        Assert.assertTrue(login);
-    }
-
 
 }

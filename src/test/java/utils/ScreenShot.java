@@ -18,5 +18,15 @@ public class ScreenShot {
         return pathname;
     }
 
-
+//    public static void tt(WebDriver driver){
+//        File src= ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+//        try {
+//            // now copy the  screenshot to desired location using copyFile //method
+//            FileUtils.copyFile(src, new File("C:/selenium/error.png"));
+//        } catch (IOException e)
+//        {
+//            System.out.println(e.getMessage());
+//
+//        }
+//    }
 }

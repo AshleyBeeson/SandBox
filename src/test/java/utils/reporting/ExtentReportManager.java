@@ -33,12 +33,16 @@ public class ExtentReportManager {
         extentTest.addScreenCaptureFromPath(imageFilePath);
     }
 
-    public void createTest(String testName){
-        ExtentTest test = report.createTest(testName);
-        tests.put(testName,test);
+    public ExtentTest getTest(String testName){
+        return tests.get(testName);
     }
 
-    public ExtentTest getTest(String testName){
+    public ExtentTest setUpTest(){
+        Exception e = new Exception();
+        e.fillInStackTrace();
+        String testName = e.getStackTrace()[1].getMethodName();
+        ExtentTest test = report.createTest(testName);
+        tests.put(testName,test);
         return tests.get(testName);
     }
 
@@ -49,6 +53,7 @@ public class ExtentReportManager {
         extentHtmlReporter.config().setChartVisibilityOnOpen(true);
         extentHtmlReporter.config().setDocumentTitle(reportDetails.getDocumentTitle());
         extentHtmlReporter.config().setReportName(reportDetails.getReportName());
+        extentHtmlReporter.config().setTheme(reportDetails.getTheme());
         return extentHtmlReporter;
     }
 
