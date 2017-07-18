@@ -4,15 +4,14 @@ import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import utils.ScreenShot;
 import utils.reporting.ExtentReportManager;
 import utils.reporting.ReportDetails;
 
 import java.io.IOException;
-import java.util.Random;
 
 public class JUnitTest {
     private WebDriver webDriver;
-    private Random random = new Random();
     private static ExtentReportManager reportManager;
 
     @BeforeClass
@@ -54,7 +53,10 @@ public class JUnitTest {
     public void failingLogLevelTest() throws IOException {
         ExtentTest extentTest = reportManager.setUpTest();
         extentTest.log(Status.WARNING,"Used to report an issue that may cause problems within a system");
+        webDriver.navigate().to("http://www.facebook.com");
+        String imagePath = ScreenShot.take(webDriver, "image");
         extentTest.log(Status.ERROR,"Used to report an issue that will cause problems within a system");
+        extentTest.addScreenCaptureFromPath(imagePath);
         extentTest.log(Status.FATAL,"Used to report an issue that will fail/break the system");
         extentTest.fail("Example Failing test");
     }
