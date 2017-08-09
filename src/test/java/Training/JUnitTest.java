@@ -1,3 +1,5 @@
+package Training;
+
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.configuration.Theme;
@@ -46,7 +48,7 @@ public class JUnitTest {
                 " person to understand what the test is doing");
         passingLogLevelTest.log(Status.DEBUG,
                 "Debug level message to display any information a TECHNICAL person might need to know");
-        passingLogLevelTest.pass("Example passing test");
+        passingLogLevelTest.pass("Training.Example passing test");
     }
 
     @Test
@@ -55,10 +57,18 @@ public class JUnitTest {
         extentTest.log(Status.WARNING,"Used to report an issue that may cause problems within a system");
         webDriver.navigate().to("http://www.facebook.com");
         String imagePath = ScreenShot.take(webDriver, "image");
+        Assert.assertTrue(true);
         extentTest.log(Status.ERROR,"Used to report an issue that will cause problems within a system");
         extentTest.addScreenCaptureFromPath(imagePath);
         extentTest.log(Status.FATAL,"Used to report an issue that will fail/break the system");
-        extentTest.fail("Example Failing test");
+        try{
+            Assert.assertTrue(false);
+            extentTest.pass("Passed");
+        } catch (AssertionError e) {
+            String details = "Training.Example Failing test: " + e.getMessage();
+            extentTest.fail(details);
+            Assert.fail(details);
+        }
     }
 
 

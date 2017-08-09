@@ -48,3 +48,8 @@ fabric.properties
 .idea
 .html
 target/
+.classpath
+.project
+.settings/
+.vscode/
+
