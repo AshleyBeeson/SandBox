@@ -19,6 +19,7 @@ public class DemoSiteLoginPage {
 
 
     public void enterUsername(String username){
+
         this.username.sendKeys(username);
     }
 
@@ -33,4 +34,5 @@ public class DemoSiteLoginPage {
     public boolean verifyLogin(){
         return verifiedLogin.isDisplayed() && !"**Failed Login**".equals(verifiedLogin.getText());
     }
+
 }

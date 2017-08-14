@@ -28,7 +28,7 @@ public class SpreadSheetReader {
     public List<String> readRow(int rowNo, String sheetName){
         List<String> row = new ArrayList<String>();
         Sheet datatypeSheet = workbook.getSheet(sheetName);
-        Row currentRow =   datatypeSheet.getRow(rowNo);
+        Row currentRow =  datatypeSheet.getRow(rowNo);
         for (Cell currentCell : currentRow) {
             switch (currentCell.getCellTypeEnum()) {
                 case STRING:
