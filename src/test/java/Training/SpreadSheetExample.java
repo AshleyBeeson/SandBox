@@ -10,10 +10,6 @@ import java.util.List;
 @RunWith(Parameterized.class)
 public class SpreadSheetExample {
 
-
-
-
-
     @Test
     public void spreadSheet(){
         SpreadSheetReader sheetReader = new SpreadSheetReader(System.getProperty("user.dir") + "/src/main/resources/Example_Spreadsheet.xlsx");

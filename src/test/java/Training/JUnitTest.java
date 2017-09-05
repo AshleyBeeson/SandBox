@@ -2,7 +2,6 @@ package Training;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -21,7 +20,7 @@ public class JUnitTest {
         String property = System.getProperty("user.dir");
         ReportDetails reportDetails = new ReportDetails(property + "\\TestReport",
                 "Basic Extent Report","Basic Report");
-        reportDetails.setTheme(Theme.DARK);
+//        reportDetails.setTheme(Theme.DARK);
         reportManager = new ExtentReportManager(ExtentReportManager.ReportType.HTML,reportDetails);
     }
 
