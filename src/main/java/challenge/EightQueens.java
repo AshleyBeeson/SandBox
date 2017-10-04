@@ -36,9 +36,9 @@ public class EightQueens {
                 }
             }
 //            build.append(String.format("Queens Left to place: %d\n", queensToPlace));
-            if (count % 10 == 0) {
-                System.out.println("Calculating...");
-            }
+//            if (count % 10 == 0) {
+//                System.out.println("Calculating...");
+//            }
             count++;
             if (count > 100) {
                 break;

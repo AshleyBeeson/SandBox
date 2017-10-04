@@ -1,20 +1,24 @@
 package stuff;
 
 import com.aventstack.extentreports.reporter.configuration.Theme;
+import com.google.common.base.Function;
 import org.junit.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import utils.reporting.ExtentReportManager;
 import utils.reporting.ReportDetails;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.fail;
+
 public class Bots {
 
     private WebDriver webDriver;
     private static ExtentReportManager reportManager;
+    private Wait<WebDriver> wait;
 
     @BeforeClass
     public static void init(){
@@ -28,6 +32,10 @@ public class Bots {
     @Before
     public void setUp(){
         webDriver = new ChromeDriver();
+        wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(60000, TimeUnit.SECONDS)
+                .pollingEvery(500, TimeUnit.MILLISECONDS)
+                .ignoring(NoSuchElementException.class);
     }
 
     @After
@@ -58,7 +66,19 @@ public class Bots {
 
         webDriver.findElement(By.cssSelector("#mainView > div > div > div > form > button")).click();
 
-        TimeUnit.SECONDS.sleep(600);
+        try {
+
+            wait.until(new Function<WebDriver, WebElement>() {
+                public WebElement apply(WebDriver driver) {
+                    return driver.findElement(By.cssSelector("#mainView > div > div.statusbar.top > div.title.ng-binding"));
+                }
+            });
+
+        } catch (TimeoutException te) {
+            fail();
+        }
+
+        //#app > main > div > section.question-choices > div
 
     }
 

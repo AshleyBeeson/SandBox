@@ -19,7 +19,6 @@ public class Notes {
 //                return false;
 //            }
 //        });
-
 //        webDriver.switchTo().alert();
 //
 //        String windowHandle = webDriver.getWindowHandle();

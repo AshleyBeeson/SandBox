@@ -18,6 +18,10 @@ public class DemoSiteLoginPage {
     protected WebElement verifiedLogin;
 
 
+    public boolean checkUsername() {
+        return username.isDisplayed();
+    }
+
     public void enterUsername(String username){
 
         this.username.sendKeys(username);

@@ -1,8 +1,6 @@
 package challenge;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Grid {
@@ -45,8 +43,13 @@ public class Grid {
         if (!placementPoint.hasQueen) {
             int xPosition = placementPoint.xPosition;
             int yPosition = placementPoint.yPosition;
-            boolean place = checkVertical(xPosition) && checkHorizontal(yPosition) && checkDiagonalRight()
-                    && checkDiagonalLeft();
+            boolean checkVertical = checkVertical(xPosition);
+            boolean checkHorizontal = checkHorizontal(yPosition);
+            boolean checkDiagonalUpRight = checkDiagonalUpRight(xPosition, yPosition);
+//            boolean checkDiagonalLeft = checkDiagonalLeft(xPosition,yPosition);
+//            System.out.println(String.format("Point:%d,%d -- Checks:V=%b,H=%b,DR=%b,DL=%b",xPosition,yPosition,
+//                    checkVertical,checkHorizontal,checkDiagonalRight,checkDiagonalLeft));
+            boolean place = checkVertical && checkHorizontal && checkDiagonalUpRight;
             if (place) {
                 placeQueen(xPosition, yPosition);
                 return String.format("Placed at %d,%d \n", xPosition, yPosition);
@@ -56,6 +59,19 @@ public class Grid {
         } else {
             return "Point already has a queen \n";
         }
+    }
+
+    private boolean checkDiagonalUpRight(int xPosition, int yPosition) {
+
+        //up right = x-- y++
+        for (int i = xPosition; i >= 0; i--) {
+            for (int j = yPosition; j < ySize; j++) {
+                System.out.print(i + "," + j + " ");
+            }
+        }
+
+        System.out.println("\n");
+        return false;
     }
 
     private boolean checkHorizontal(int yPosition) {
@@ -78,49 +94,4 @@ public class Grid {
         return true;
     }
 
-    private boolean checkDiagonalRight() {
-        List<String> points = calculateDiagonalXPoints();
-        for (String point : points) {
-            GridPoint gridPoint = gridPoints.get(point);
-            if (gridPoint.hasQueen) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private List<String> calculateDiagonalXPoints() {
-        List<String> points = new ArrayList<String>();
-        int c = 0;
-//        System.out.println("X Diagonal");
-        for (int i = xSize - 1; i > 0; i--) {
-            points.add(i + "," + c);
-            c++;
-        }
-//        System.out.println(points);
-        return points;
-    }
-
-    private boolean checkDiagonalLeft() {
-        List<String> points = calculateDiagonalYPoints();
-        for (String point : points) {
-            GridPoint gridPoint = gridPoints.get(point);
-            if (gridPoint.hasQueen) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private List<String> calculateDiagonalYPoints() {
-        List<String> points = new ArrayList<String>();
-        int c = ySize - 1;
-//        System.out.println("Y Diagonal");
-        for (int i = ySize - 1; i > -1; i--) {
-            points.add(i + "," + c);
-            c--;
-        }
-//        System.out.println(points);
-        return points;
-    }
 }
