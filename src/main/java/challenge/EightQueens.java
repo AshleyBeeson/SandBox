@@ -1,9 +1,6 @@
 package challenge;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.*;
 
 public class EightQueens {
 
@@ -17,65 +14,89 @@ public class EightQueens {
          * for which solutions exist for all natural numbers n with the exception of n=2 and n=3.[1]
          */
 
-        int queensToPlace = 2;
-        int xDimension = 3, yDimension = 3;
+        //Add first queen
+        //Calculate other queen positions
 
-        StringBuilder build = new StringBuilder();
-        Grid grid = new Grid(xDimension, yDimension);
-        System.out.println("Starting Calculations");
-        int count = 0;
-        long startTime = System.currentTimeMillis();
-        while (queensToPlace > 0) {
-            for (int i = 0; i < xDimension; i++) {
-                for (int j = 0; j < yDimension; j++) {
-                    String placement = grid.checkQueenPlacement(grid.getGridPoint(i, j));
-                    if (placement.toLowerCase().contains("placed")) {
-                        queensToPlace--;
-                        build.append(placement);
-                    }
+        EightQueens eightQueens = new EightQueens();
+        int challengeSize = 4;
+        Map<String, GridPoint> board = eightQueens.setUpBoard(challengeSize);
+        System.out.println("Initial Board");
+        eightQueens.displayBoard(board);
+        board.get("0,0").setQueenPlaced(true);
+        System.out.println("\nAfter first queen");
+        eightQueens.displayBoard(board);
+        eightQueens.updateBoard(board, challengeSize);
+        System.out.println("\nFirst Update of board");
+        eightQueens.displayBoard(board);
+
+    }
+
+    private void updateBoard(Map<String, GridPoint> board, int size) {
+        List<String> posToUpdate = new ArrayList<String>();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                GridPoint gridPoint = board.get(String.format("%s,%s", i, j));
+                if (gridPoint.isQueenPlaced()) {
+                    gridPoint.setCanQueenBePlaced(false);
+                    calculate(gridPoint, posToUpdate, size);
                 }
             }
-//            build.append(String.format("Queens Left to place: %d\n", queensToPlace));
-//            if (count % 10 == 0) {
-//                System.out.println("Calculating...");
-//            }
-            count++;
-            if (count > 100) {
-                break;
-            }
         }
-        long endTime = System.currentTimeMillis();
-        long secondsTaken = (endTime - startTime) / 1000;
-        build.append(String.format("#### Queens Unplaced = %d #### \n Time taken = %d", queensToPlace, secondsTaken));
-        build.append("\n");
-        build.append(grid.displayGrid());
-        outToFile(build, "Eight_Queens_Output");
-
-
+        update(board, posToUpdate);
     }
 
-    private static void outToFile(StringBuilder build, String fileName) {
-        String filePath = System.getProperty("user.dir");
-        BufferedWriter bw = null;
-        FileWriter fw = null;
-        try {
-            fw = new FileWriter(filePath + File.separatorChar + fileName);
-            bw = new BufferedWriter(fw);
-            bw.write(build.toString());
-            System.out.println("Done writing output");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bw != null)
-                    bw.close();
-                if (fw != null)
-                    fw.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+    private void update(Map<String, GridPoint> board, List<String> posToUpdate) {
+        for (String pos : posToUpdate) {
+            board.get(pos).setCanQueenBePlaced(false);
         }
     }
 
+    private void calculate(GridPoint gridPoint, List<String> posToUpdate, int size) {
+        int x = gridPoint.getPosition().x;
+        int y = gridPoint.getPosition().y;
+        int row = 0, column = 0;
+        //------
+        while (row < size) {
+            posToUpdate.add(String.format("%s,%s", row, y));
+            row++;
+        }
 
+        /*
+        * |
+        * |
+        * |
+        * |*/
+        while (column < size) {
+            posToUpdate.add(String.format("%s,%s", x, column));
+            column++;
+        }
+
+        column = 0;
+        row = 0;
+        //````////////
+        // -y+x (+y-x)
+
+
+        //````\\\\\\\
+        //-y-x (+y+x)
+
+    }
+
+    private void displayBoard(Map<String, GridPoint> board) {
+        Collection<GridPoint> values = board.values();
+        for (GridPoint value : values) {
+            System.out.println(String.format("Location: %s -- hasQueen: %b -- canQueenBePlaced: %b", value.getPos(), value.isQueenPlaced(), value.canQueenBePlaced()));
+        }
+    }
+
+
+    private Map<String, GridPoint> setUpBoard(int size) {
+        Map<String, GridPoint> grid = new HashMap<String, GridPoint>();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                grid.put(String.format("%d,%d", i, j), new GridPoint(i, j));
+            }
+        }
+        return grid;
+    }
 }

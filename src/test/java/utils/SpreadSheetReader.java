@@ -17,11 +17,20 @@ public class SpreadSheetReader {
     private Workbook workbook;
 
     public SpreadSheetReader(String fileName){
+        FileInputStream excelFile = null;
         try {
-            FileInputStream excelFile = new FileInputStream(new File(fileName));
+            excelFile = new FileInputStream(new File(fileName));
             workbook = new XSSFWorkbook(excelFile);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (excelFile != null) {
+                    excelFile.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -50,7 +59,7 @@ public class SpreadSheetReader {
                     System.out.println("Error in cell");
                     break;
                 case FORMULA:
-                    row.add(currentCell.getStringCellValue());
+                    row.add(currentCell.getCellFormula());
                     break;
             }
         }

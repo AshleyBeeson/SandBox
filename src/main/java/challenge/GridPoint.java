@@ -1,18 +1,30 @@
 package challenge;
 
-
 import lombok.Data;
+
+import java.awt.*;
 
 @Data
 public class GridPoint {
 
-    public int xPosition, yPosition;
+    private Point position;
+    private boolean queenPlaced;
+    private boolean canQueenBePlaced;
 
-    public boolean hasQueen;
-
-    public GridPoint(int xPosition, int yPosition) {
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
+    public GridPoint(int x, int y) {
+        position = new Point();
+        position.x = x;
+        position.y = y;
+        canQueenBePlaced = true;
     }
+
+    public boolean canQueenBePlaced() {
+        return canQueenBePlaced;
+    }
+
+    public String getPos() {
+        return String.format("%d,%d", position.x, position.y);
+    }
+
 
 }
